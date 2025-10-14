@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template para el contenido del portal de proveedor -->
+    <template id="purchase_order_portal_content_origin" inherit_id="purchase.purchase_order_portal_content">
+        <!-- Reemplazar el nombre del producto en la tabla del portal -->
+        <xpath expr="//td[@id='product_name']/span[@t-field='line.name']" position="replace">
+            <span t-out="line.display_name_override or line.name"/>
+        </xpath>
+    </template>
+</odoo>

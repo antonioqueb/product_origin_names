@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template para el reporte de Orden de Compra -->
+    <template id="report_purchaseorder_document_origin" inherit_id="purchase.report_purchaseorder_document">
+        <!-- Reemplazar el nombre del producto en las líneas de la orden de compra -->
+        <xpath expr="//td[@id='product']/span[@t-field='line.name']" position="replace">
+            <span t-out="line.display_name_override or line.name"/>
+        </xpath>
+    </template>
+    
+    <!-- Template para el reporte de Solicitud de Cotización -->
+    <template id="report_purchasequotation_document_origin" inherit_id="purchase.report_purchasequotation_document">
+        <!-- Reemplazar el nombre del producto en las líneas de la cotización -->
+        <xpath expr="//td[@id='product']/span[@t-field='order_line.name']" position="replace">
+            <span t-out="order_line.display_name_override or order_line.name"/>
+        </xpath>
+    </template>
+</odoo>

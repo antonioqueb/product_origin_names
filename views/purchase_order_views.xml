@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_form_origin_name" model="ir.ui.view">
+        <field name="name">purchase.order.form.origin.name</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar campos en la vista de formulario (cuando se abre una línea) -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+                <field name="selected_origin_name_id" 
+                       options="{'no_create': True}" 
+                       optional="show"/>
+                <field name="display_name_override" invisible="1"/>
+            </xpath>
+            
+            <!-- Agregar campos en la vista de lista (tabla de líneas) -->
+            <xpath expr="//field[@name='order_line']/list//field[@name='product_id']" position="after">
+                <field name="selected_origin_name_id" 
+                       options="{'no_create': True}" 
+                       optional="hide"
+                       column_invisible="1"/>
+                <field name="display_name_override" column_invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

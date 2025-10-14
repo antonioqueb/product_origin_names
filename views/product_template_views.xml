@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista tree para product.origin.name -->
+    <record id="view_product_origin_name_tree" model="ir.ui.view">
+        <field name="name">product.origin.name.tree</field>
+        <field name="model">product.origin.name</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista de producto extendida -->
+    <record id="view_product_template_form_origin_names" model="ir.ui.view">
+        <field name="name">product.template.form.origin.names</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase']" position="after">
+                <page string="Nombres de Origen" name="origin_names">
+                    <field name="origin_name_ids" nolabel="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
