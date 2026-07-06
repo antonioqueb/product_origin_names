@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Nombres de Origen para Productos',
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.2.1',
     'category': 'Inventory/Purchase',
     'summary': 'Gestiona nombres alternativos de productos por proveedor',
     'description': """

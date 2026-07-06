@@ -45,12 +45,14 @@
                 <field name="order_id" string="Orden de compra"/>
 
                 <filter name="filter_confirmed" string="Compras confirmadas"
-                        domain="[('state', 'in', ('purchase', 'done'))]"/>
+                        domain="[('state', 'in', ['purchase', 'done'])]"/>
                 <filter name="filter_quotations" string="Cotizaciones (precios ofertados)"
-                        domain="[('state', 'in', ('draft', 'sent'))]"/>
+                        domain="[('state', 'in', ['draft', 'sent'])]"/>
                 <separator/>
-                <filter name="filter_last_year" string="Últimos 12 meses"
-                        domain="[('som_date_order', '&gt;=', (context_today() + relativedelta(months=-12)).strftime('%Y-%m-%d'))]"/>
+                <!-- Filtro de fecha nativo: facetas de periodo (mes/trimestre/año)
+                     sin expresiones dinámicas en el dominio. -->
+                <filter name="filter_date_order" string="Fecha de compra"
+                        date="som_date_order"/>
 
                 <group expand="0" string="Agrupar por">
                     <filter name="group_partner" string="Proveedor"
