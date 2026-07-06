@@ -54,16 +54,17 @@
                 <filter name="filter_date_order" string="Fecha de compra"
                         date="som_date_order"/>
 
-                <group expand="0" string="Agrupar por">
-                    <filter name="group_partner" string="Proveedor"
-                            context="{'group_by': 'partner_id'}"/>
-                    <filter name="group_product" string="Producto"
-                            context="{'group_by': 'product_id'}"/>
-                    <filter name="group_origin" string="Nombre de origen"
-                            context="{'group_by': 'mask_name'}"/>
-                    <filter name="group_date" string="Mes de compra"
-                            context="{'group_by': 'som_date_order:month'}"/>
-                </group>
+                <!-- Agrupadores: sin envoltorio <group> — el RNG de search en
+                     Odoo 19 ya no acepta <group expand=...> con solo filtros. -->
+                <separator/>
+                <filter name="group_partner" string="Proveedor"
+                        context="{'group_by': 'partner_id'}"/>
+                <filter name="group_product" string="Producto"
+                        context="{'group_by': 'product_id'}"/>
+                <filter name="group_origin" string="Nombre de origen"
+                        context="{'group_by': 'mask_name'}"/>
+                <filter name="group_date" string="Mes de compra"
+                        context="{'group_by': 'som_date_order:month'}"/>
             </search>
         </field>
     </record>
