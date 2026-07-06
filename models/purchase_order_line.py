@@ -26,6 +26,19 @@ class PurchaseOrderLine(models.Model):
              'Si no existe, puede escribirlo aquí y se guardará para este proveedor.'
     )
 
+    # ── Historial de precios de compra ────────────────────────────────────
+    # Campos related propios (prefijo som_) para la vista "Historial de
+    # Precios": estables ante renombres de campos del core entre versiones.
+    som_date_order = fields.Datetime(
+        related='order_id.date_order',
+        store=True,
+        string='Fecha de compra',
+    )
+    som_uom_name = fields.Char(
+        related='product_id.uom_id.name',
+        string='Unidad',
+    )
+
     def _get_partner_origin_name(self):
         """Devuelve el nombre de origen registrado para el producto y el
         proveedor de la orden (o un recordset vacío si no existe)."""
