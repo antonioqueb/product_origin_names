@@ -248,11 +248,12 @@
                     </div>
                 </div>
 
-                <!-- OBSERVACIONES -->
-                <t t-if="o.notes">
+                <!-- OBSERVACIONES (campo defensivo: 'note'/'notes' según versión) -->
+                <t t-set="som_po_notes" t-value="('note' in o._fields and o.note) or ('notes' in o._fields and o.notes) or False"/>
+                <t t-if="som_po_notes">
                     <div class="som-section-title" style="margin-top: 10px;">Observaciones</div>
                     <div style="font-size: 9px; padding: 6px 8px; border: 1px solid #d8d8d8 !important;">
-                        <span t-field="o.notes"/>
+                        <span t-out="som_po_notes"/>
                     </div>
                 </t>
 
@@ -405,11 +406,12 @@
                     </tbody>
                 </table>
 
-                <!-- OBSERVACIONES -->
-                <t t-if="o.notes">
+                <!-- OBSERVACIONES (campo defensivo: 'note'/'notes' según versión) -->
+                <t t-set="som_po_notes" t-value="('note' in o._fields and o.note) or ('notes' in o._fields and o.notes) or False"/>
+                <t t-if="som_po_notes">
                     <div class="som-section-title" style="margin-top: 10px;">Observaciones</div>
                     <div style="font-size: 9px; padding: 6px 8px; border: 1px solid #d8d8d8 !important;">
-                        <span t-field="o.notes"/>
+                        <span t-out="som_po_notes"/>
                     </div>
                 </t>
 
