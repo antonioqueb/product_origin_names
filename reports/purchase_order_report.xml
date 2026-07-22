@@ -208,7 +208,7 @@
                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                 </td>
                                 <td class="som-small">
-                                    <span t-esc="', '.join(t.name for t in line.taxes_id)"/>
+                                    <span t-esc="', '.join(t.name for t in line.tax_ids)"/>
                                 </td>
                                 <td class="som-num">
                                     <span t-field="line.price_subtotal"
