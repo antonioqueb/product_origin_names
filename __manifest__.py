@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Nombres de Origen para Productos',
-    'version': '19.0.1.2.2',
+    'version': '19.0.1.3.0',
     'category': 'Inventory/Purchase',
     'summary': 'Gestiona nombres alternativos de productos por proveedor',
     'description': """
@@ -12,7 +12,7 @@
         - Mostrar nombre apropiado en portal de proveedor
     """,
     'author': 'Alphaqueb Consulting',
-    'depends': ['product', 'purchase', 'stock'],
+    'depends': ['product', 'purchase', 'stock', 'stock_lot_dimensions'],
     'data': [
         'security/ir.model.access.csv',
         'views/product_template_views.xml',
