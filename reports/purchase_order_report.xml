@@ -260,18 +260,160 @@
         </xpath>
     </template>
 
-    <!-- Solicitud de Cotización (documento aparte que se envía al
-         proveedor): conserva su estructura simple nativa, con el nombre
-         del producto según el proveedor y los estilos del canon. -->
-    <template id="report_purchasequotation_document_origin" inherit_id="purchase.report_purchasequotation_document">
-        <xpath expr="//td[@id='product']/span[@t-field='order_line.name']" position="replace">
-            <span t-out="order_line.display_name_override or order_line.name"/>
-        </xpath>
-    </template>
-
+    <!-- ═══════════════════════════════════════════════════════════════
+         SOLICITUD DE COTIZACIÓN — ESTRUCTURA 100% SOM (variante sin
+         precios del canon, igual que la familia "Sin Precios" de la
+         suite). Es el documento que Odoo imprime en órdenes en borrador/
+         enviadas, por eso recibe EXACTAMENTE el mismo tratamiento. -->
     <template id="report_purchasequotation_document_som_style" inherit_id="purchase.report_purchasequotation_document">
-        <xpath expr="//div[hasclass('page')]" position="inside">
-            <t t-call="stock_lot_dimensions.som_report_style"/>
+
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address" t-value="False"/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('page')]" position="replace">
+            <!-- Anchors ocultos para herencias estándar. NO BORRAR. -->
+            <div style="display: none;">
+                <div id="informations"/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th name="th_description"/>
+                            <th name="th_expected_date"/>
+                            <th name="th_quantity"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="product"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10px; color: #000; line-height: 1.25;">
+
+                <t t-call="stock_lot_dimensions.som_report_style"/>
+
+                <!-- ENCABEZADO -->
+                <div class="row border-bottom pb-2 mb-2" style="border-color: #000 !important; align-items: center;">
+                    <div class="col-8">
+                        <h4 class="text-uppercase mb-0" style="font-weight: 800; letter-spacing: 1px;">
+                            <span>Solicitud de Cotización</span>
+                            <span t-field="o.name" style="margin-left: 10px; color: #333;"/>
+                        </h4>
+                    </div>
+                    <div class="col-4 text-end">
+                        <div style="font-size: 14px; color: #505050; margin-top: 4px;">
+                            Impreso: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFORMACIÓN GENERAL -->
+                <div style="margin-bottom: 12px; font-size: 10px;">
+                    <table style="font-size: 9px; width: 100%; border-collapse: collapse; border: 1px solid #d8d8d8 !important; table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 44%;"/>
+                            <col style="width: 56%;"/>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="som-section-title" style="margin: 0;">Proveedor</th>
+                                <th class="som-section-title" style="margin: 0;">Detalle de la Solicitud</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="vertical-align: top; padding: 0; border: 1px solid #d8d8d8 !important;">
+                                    <div style="padding: 6px 8px; border-bottom: 1px solid #d8d8d8 !important; overflow-wrap: anywhere; word-break: break-word;">
+                                        <span style="font-weight: bold; font-size: 11px;" t-field="o.partner_id.name"/>
+                                        <span t-if="o.partner_id.vat" style="display: block; font-size: 8.5px; color: #555; margin-top: 2px;">
+                                            RFC: <span t-field="o.partner_id.vat"/>
+                                        </span>
+                                    </div>
+                                    <div style="padding: 6px 8px; font-size: 9px; color: #333; line-height: 1.25; overflow-wrap: anywhere; word-break: break-word;">
+                                        <span t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                                    </div>
+                                </td>
+                                <td style="vertical-align: top; padding: 0; border: 1px solid #d8d8d8 !important;">
+                                    <div class="som-info-row">
+                                        <div class="som-info-label" style="width: 40%;">Comprador</div>
+                                        <div class="som-info-value">
+                                            <span t-if="o.user_id" t-field="o.user_id.name"/>
+                                            <span t-else="" style="color: #aaa;">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="som-info-row">
+                                        <div class="som-info-label" style="width: 40%;">Referencia / PI</div>
+                                        <div class="som-info-value">
+                                            <span t-if="o.partner_ref" t-field="o.partner_ref"/>
+                                            <span t-else="" style="color: #aaa;">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="som-info-row" style="border-bottom: none !important;">
+                                        <div class="som-info-label" style="width: 40%;">Fecha de Solicitud</div>
+                                        <div class="som-info-value">
+                                            <span t-field="o.date_order" t-options='{"widget": "date"}'/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- MATERIALES (sin precios: es una solicitud) -->
+                <div class="som-section-title">Materiales Solicitados</div>
+                <table class="table table-sm table-striped som-table" style="margin-bottom: 8px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 55%;">Producto</th>
+                            <th style="width: 15%;">Recepción Esperada</th>
+                            <th class="som-num" style="width: 13%;">Cantidad</th>
+                            <th style="width: 12%;">UdM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="line_number" t-value="0"/>
+                        <t t-foreach="o.order_line" t-as="order_line">
+                            <tr t-if="order_line.display_type == 'line_section'">
+                                <td colspan="5" class="som-section-title" style="border: 1px solid #d8d8d8 !important;">
+                                    <span t-field="order_line.name"/>
+                                </td>
+                            </tr>
+                            <tr t-elif="order_line.display_type == 'line_note'">
+                                <td colspan="5" style="font-style: italic; color: #555;">
+                                    <span t-field="order_line.name"/>
+                                </td>
+                            </tr>
+                            <tr t-else="">
+                                <t t-set="line_number" t-value="line_number + 1"/>
+                                <td class="som-num"><t t-esc="line_number"/></td>
+                                <td style="overflow-wrap: anywhere; word-break: break-word;">
+                                    <span t-out="order_line.display_name_override or order_line.name"/>
+                                </td>
+                                <td class="som-nowrap">
+                                    <span t-if="order_line.date_planned" t-field="order_line.date_planned" t-options='{"widget": "date"}'/>
+                                    <span t-else="" style="color: #aaa;">-</span>
+                                </td>
+                                <td class="som-num"><span t-field="order_line.product_qty"/></td>
+                                <td><span t-field="order_line.product_uom_id.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- OBSERVACIONES -->
+                <t t-if="o.notes">
+                    <div class="som-section-title" style="margin-top: 10px;">Observaciones</div>
+                    <div style="font-size: 9px; padding: 6px 8px; border: 1px solid #d8d8d8 !important;">
+                        <span t-field="o.notes"/>
+                    </div>
+                </t>
+
+            </div>
         </xpath>
     </template>
 
